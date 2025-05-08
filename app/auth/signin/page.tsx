@@ -19,14 +19,16 @@ import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 import svg from "../../../public/github.svg";
 
+type SignInFormData = z.infer<typeof signInSchema>;
+
 const SignIn = () => {
-  const [globalError, setGlobalError] = useState<string>("");
-  const form = useForm<z.infer<typeof signInSchema>>({
+  const [globalError, setGlobalError] = useState<Error | null>(null);
+  const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
@@ -34,11 +36,16 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+  const onSubmit: SubmitHandler<SignInFormData> = async (values) => {
     try {
       const result = await handleCredentialsSignIn(values);
-    } catch (error) {
-      console.log("error something went wrong");
+      console.log("result", result);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setGlobalError(error);
+      } else {
+        console.log("something went wrong");
+      }
     }
   };
 

@@ -3,6 +3,13 @@ import Credentials from "next-auth/providers/credentials";
 import { signInSchema } from "./lib/zod";
 import GitHub from "next-auth/providers/github";
 
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     GitHub({
@@ -23,8 +30,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           placeholder: "Enter Password",
         },
       },
-      async authorize(credentials) {
-        let user = null;
+      async authorize(credentials): Promise<any> {
+        let user: User | null = null;
 
         const parsedCredentials = signInSchema.safeParse(credentials);
 
@@ -55,13 +62,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const { pathname } = nextUrl;
       const role = auth?.user.role;
 
-      if (pathname === "/userpanel" && role === "admin") {
+      if (
+        (pathname === "/adminpanel" && role === "user") ||
+        (pathname === "/userpanel" && role === "admin")
+      ) {
         return Response.redirect(new URL("/", nextUrl));
       }
 
       if (pathname === "/auth/signin" && isLoggedIn) {
         return Response.redirect(new URL("/", nextUrl));
       }
+
       return !!auth;
     },
     jwt({ token, user }) {
