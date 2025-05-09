@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 
+// export const fetchCache = 'force-no-store'
+
 interface ProductTypes {
   id: number;
   title: string;
@@ -14,6 +16,10 @@ const ServerSideRendering = async () => {
     "https://fakestoreapi.com/products"
   );
   const products = response.data;
+
+  if (!products.length) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col items-center">

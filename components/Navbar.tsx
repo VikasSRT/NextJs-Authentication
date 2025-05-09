@@ -15,6 +15,15 @@ const Navbar = async () => {
       <Link href="/" className="text-black text-xl">
         Home
       </Link>
+      <Link href="/clientside" className="text-black text-xl">
+        clientside
+      </Link>
+      <Link href="/serverside" className="text-black text-xl">
+        serverside
+      </Link>
+      <Link href="/contactus" className="text-black text-xl">
+        contact
+      </Link>
       {!session ? (
         <Link
           href="/auth/signin"
