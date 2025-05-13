@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, ReactNode, useState } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 
 interface ThemeContextInterface {
   isDark: boolean;
@@ -12,16 +12,30 @@ export const ThemeContext = createContext<ThemeContextInterface | undefined>(
 );
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState<boolean>(false);
   const toggleTheme = () => {
-    if (isDark) {
-      document.body.classList.remove("dark");
-    } else {
-      document.body.classList.add("dark");
-    }
     setIsDark((prev) => !prev);
-    console.log("isDark mode on", isDark);
   };
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("isDark");
+    console.log("storedTheme", storedTheme)
+    if (storedTheme) {
+      setIsDark(JSON.parse(storedTheme));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+
+    if (typeof window !== undefined) {
+      localStorage.setItem("isDark", JSON.stringify(isDark));
+    }
+  }, [isDark]);
 
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>

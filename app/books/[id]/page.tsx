@@ -44,7 +44,7 @@ const page = async ({ params }: any) => {
           />
         </div>
         <div className="mt-5 text-center">
-          <h1 className="hover:text-blue-600 underline">{book?.title}</h1>
+          <h1 className="hover:text-blue-600">{book?.title}</h1>
           <p>{book?.author}</p>
         </div>
       </div>

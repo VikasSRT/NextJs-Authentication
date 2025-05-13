@@ -14,7 +14,9 @@
   --nav-bg-color: #27272a;
 }
 
-body, .homeGreet {
+body,
+.homeGreet,
+div {
   background-color: var(--bg-color);
   color: var(--text-color);
 }

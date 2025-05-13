@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { SessionProvider } from "next-auth/react";
 import ThemeProvider from "@/providers/ThemeProvider";
+import TanStackProvider from "@/providers/TanStackProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,10 +19,12 @@ export default async function RootLayout({
     <SessionProvider>
       <html lang="en">
         <body>
-          <ThemeProvider>
-            <Navbar />
-            {children}
-          </ThemeProvider>
+          <TanStackProvider>
+            <ThemeProvider>
+              <Navbar />
+              {children}
+            </ThemeProvider>
+          </TanStackProvider>
         </body>
       </html>
     </SessionProvider>
